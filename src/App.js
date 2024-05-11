@@ -69,9 +69,9 @@ function App() {
     },
   ]);
 
-  function highlightText(str, text, style) {
+  function highlightText(str, text, style, id) {
     const regex = new RegExp(`(${text})`, "gi");
-    return str.replace(regex, `<font style="${style}">$1</font>`);
+    return str.replace(regex, `<font style="${style}" id="${id}">$1</font>`);
   }
 
   let selectTextEvent = () => {
@@ -85,31 +85,17 @@ function App() {
 
   let btnAction = (action, attr) => {
     let index = selectedTag.id.split("area-")[1];
+    let id = selectedTag.id;
     let newTexts = texts;
 
     if (action === "tag") {
       newTexts[index].element = attr;
-
-      setTexts(newTexts);
     } else {
-      // let newElement = document.createElement("font");
-
-      // let cssElement = attr.split(":")[0].trim(),
-      //   cssValue = attr.split(":")[1].trim();
-
-      // newElement.style[cssElement] = cssValue;
-      // newElement.textContent = selectedText;
-
-      let newText = highlightText(newTexts[index].text, selectedText, attr);
+      let newText = highlightText(newTexts[index].text, selectedText, attr, id);
       newTexts[index].text = newText;
-      console.log(newTexts[index]);
-      setTexts(newTexts);
-      // let style = selectedTag.style;
-
-      // style[cssElement] == cssValue
-      //   ? (style[cssElement] = "")
-      //   : (style[cssElement] = cssValue);
     }
+
+    setTexts(newTexts);
     setReload(!reload);
   };
 
