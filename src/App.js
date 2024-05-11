@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createElement, useEffect, useState } from "react";
 import "./App.css";
 import Texts from "./components/Texts";
 import Buttons from "./components/Buttons";
@@ -12,18 +12,22 @@ function App() {
     {
       text: `Devs Just Want to Have Fun by Cyndi Lauper`,
       element: `p`,
+      style: "",
     },
     {
       text: `I come home in the morning light My mother says, “When you gonna live your life right?” Oh mother dear we’re not the fortunate ones And devs, they wanna have fun Oh devs just want to have fun`,
       element: `p`,
+      style: "",
     },
     {
       text: `The phone rings in the middle of the night My father yells, "What you gonna do with your life?" Oh daddy dear, you know you’re still number one But girls devs, they wanna have fun Oh devs just want to have`,
       element: `p`,
+      style: "",
     },
     {
       text: `That’s all they really want Some fun When the working day is done Oh devs, they wanna have fun Oh devs just wanna have fun (devs, they wanna, wanna have fun, devs wanna have)`,
       element: `p`,
+      style: "",
     },
   ]);
 
@@ -53,46 +57,64 @@ function App() {
       attr: `p`,
       action: `tag`,
     },
+    {
+      text: `Strong`,
+      attr: `font-weight: bold`,
+      action: `style`,
+    },
+    {
+      text: `Italic`,
+      attr: `font-style: italic`,
+      action: `style`,
+    },
   ]);
 
+  function highlightText(str, text, style) {
+    const regex = new RegExp(`(${text})`, "gi");
+    return str.replace(regex, `<font style="${style}">$1</font>`);
+  }
+
   let selectTextEvent = () => {
-    // let activeElement = document.activeElement;
-
     let selectText = window.getSelection().toString();
+    setSelectedText(selectText);
 
-    if (selectText.length > 0) {
-      // Belirli bir yazı seçildiğinde
-
-      setSelectedText(selectText);
-      setSelectedTag("");
-    } else {
-      // Belirli bir yazı seçilmediğinde
-
-      var range = window.getSelection().getRangeAt(0);
-      var parentElement = range.commonAncestorContainer.parentElement;
-
-      setSelectedTag(parentElement);
-      setSelectedText("");
-      // let focusNode = selection.focusNode;
-      // console.log(focusNode);
-    }
+    var range = window.getSelection().getRangeAt(0);
+    var parentElement = range.commonAncestorContainer.parentElement;
+    setSelectedTag(parentElement);
   };
 
   let btnAction = (action, attr) => {
-    if (action === "tag" && selectedText == "") {
-      let index = selectedTag.id.split("area-")[1];
-      let newTexts = texts;
-      
+    let index = selectedTag.id.split("area-")[1];
+    let newTexts = texts;
+
+    if (action === "tag") {
       newTexts[index].element = attr;
 
       setTexts(newTexts);
-      setReload(!reload);
+    } else {
+      // let newElement = document.createElement("font");
+
+      // let cssElement = attr.split(":")[0].trim(),
+      //   cssValue = attr.split(":")[1].trim();
+
+      // newElement.style[cssElement] = cssValue;
+      // newElement.textContent = selectedText;
+
+      let newText = highlightText(newTexts[index].text, selectedText, attr);
+      newTexts[index].text = newText;
+      console.log(newTexts[index]);
+      setTexts(newTexts);
+      // let style = selectedTag.style;
+
+      // style[cssElement] == cssValue
+      //   ? (style[cssElement] = "")
+      //   : (style[cssElement] = cssValue);
     }
+    setReload(!reload);
   };
 
   return (
     <div className="App">
-
       <Buttons datas={buttons} btnAction={btnAction} />
 
       <div onMouseUp={selectTextEvent}>
