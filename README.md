@@ -13,7 +13,7 @@ Bu proje, React kullanarak içerik düzenlenebilir bir bileşen (ContentEditable
 Bu projeye başlamak için, depoyu klonlayın ve bağımlılıkları yükleyin:
 
 ```bash
-git clone https://github.com/kullaniciadi/ContentEditable-with-React.git
+git clone https://github.com/dursuninel/ContentEditable-with-React.git
 cd ContentEditable-with-React
 npm install
 ```
